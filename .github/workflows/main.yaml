@@ -1,0 +1,25 @@
+name: Deploy DockerBase to GHPackage
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Build and push Docker Image
+        run: docker build -t Shortvision-DockerBase .
+
+      - name: Push To GH Package
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: univ-smb-m1-isc-2022/Shortvision-DockerBase/main
+          tags: latest
